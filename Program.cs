@@ -2,8 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+using System.Text;
 using symphony2.Models;
-using symphony2.Seeders;
+using symphony2.Database.Seeders;
+using symphony2.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +21,21 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<SymphonyContext>(options =>
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+// Configure JWT authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
+        };
+    });
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -26,6 +46,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthorization();
+app.UseMiddleware<UnauthorizedMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -38,6 +60,7 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
 
         UserSeeder.Seed(context);
+        CourseSeeder.Seed(context);
     }
     catch (Exception ex)
     {

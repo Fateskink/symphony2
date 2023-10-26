@@ -10,13 +10,14 @@ public partial class SymphonyContext : DbContext
     {
     }
 
-
     public SymphonyContext(DbContextOptions<SymphonyContext> options)
         : base(options)
     {
     }
 
     public virtual DbSet<User> User { get; set; }
+    public virtual DbSet<Course> Course { get; set; }
+    public virtual DbSet<UserCourse> UserCourses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseMySql("server=localhost;port=3306;database=symphony;user=root;password=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.1.0-mysql"));

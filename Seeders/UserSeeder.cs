@@ -1,6 +1,7 @@
 using symphony2.Models;
 using System;
 using System.Linq;
+using symphony2.Utils;
 
 namespace symphony2.Seeders;
 
@@ -14,6 +15,8 @@ public class UserSeeder
             {
                 var user = new User
                 {
+                    Email = GenerateRandomEmail(),
+                    Password = PasswordUtils.EncryptPassword(GenerateRandomNumber()),
                     FirstName = GenerateRandomName(),
                     LastName = GenerateRandomName(),
                     Number = GenerateRandomNumber(),
@@ -36,5 +39,13 @@ public class UserSeeder
     {
         Random random = new Random();
         return "0" + new string(Enumerable.Range(0, 9).Select(_ => random.Next(0, 10).ToString()[0]).ToArray());
+    }
+
+    private static string GenerateRandomEmail()
+    {
+        string firstName = GenerateRandomName();
+        string lastName = GenerateRandomName();
+        string number = GenerateRandomNumber();
+        return $"{firstName}{lastName}{number}@gmail.com";
     }
 }

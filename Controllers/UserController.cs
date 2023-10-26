@@ -41,9 +41,11 @@ namespace symphony2.Controllers
         [Authorize]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-                var user = await _context.User
-                            .Where(u => u.Id == id && u.DeletedAt == null)
-                            .FirstOrDefaultAsync();
+            var user = await _context.User
+                .Where(u => u.Id == id && u.DeletedAt == null)
+                .Include(u => u.UserCourses)
+                .ThenInclude(uc => uc.Course)
+                .FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -86,8 +88,9 @@ namespace symphony2.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
         {
-            var user = await _context.User.Where(u => u.Id == id && u.DeletedAt == null)
-                                            .FirstOrDefaultAsync();
+            var user = await _context.User
+                .Where(u => u.Id == id && u.DeletedAt == null)
+                .FirstOrDefaultAsync();
 
             if (user == null)
             {

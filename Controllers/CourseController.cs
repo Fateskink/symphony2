@@ -23,7 +23,6 @@ namespace symphony2.Controllers
 
         // GET: api/Course
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
             var courses = await _context.Course.Where(u => u.DeletedAt == null).ToListAsync();
@@ -38,12 +37,13 @@ namespace symphony2.Controllers
 
         // GET: api/courses/{id}
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<Course>> GetCourseById(int id)
         {
-                var course = await _context.Course
-                            .Where(u => u.Id == id && u.DeletedAt == null)
-                            .FirstOrDefaultAsync();
+            var course = await _context.Course
+                .Where(u => u.Id == id && u.DeletedAt == null)
+                .Include(u => u.UserCourses)
+                .ThenInclude(uc => uc.User)
+                .FirstOrDefaultAsync();
 
             if (course == null)
             {
@@ -54,7 +54,7 @@ namespace symphony2.Controllers
         }
 
         // POST: api/course
-        [HttpPost("course")]
+        [HttpPost()]
         [Authorize]
         public ActionResult<string> CreateBuilder([FromBody] Course course)
         {
@@ -63,11 +63,9 @@ namespace symphony2.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Set CreatedAt and UpdatedAt timestamps to the current time
             course.CreatedAt = DateTime.Now;
             course.UpdatedAt = DateTime.Now;
 
-            // Add the user to the database
             _context.Course.Add(course);
             _context.SaveChanges();
 
@@ -79,8 +77,9 @@ namespace symphony2.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateCourse(int id, [FromBody] Course updatedCourse)
         {
-            var course = await _context.Course.Where(u => u.Id == id && u.DeletedAt == null)
-                                            .FirstOrDefaultAsync();
+            var course = await _context.Course
+                .Where(u => u.Id == id && u.DeletedAt == null)
+                .FirstOrDefaultAsync();
 
             if (course == null)
             {

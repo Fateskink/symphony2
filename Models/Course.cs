@@ -25,4 +25,6 @@ public partial class Course
     public DateTime UpdatedAt { get; set; }
 
     public DateTime? DeletedAt { get; set; }
+
+    public virtual ICollection<UserCourse> UserCourses { get; set; }
 }

@@ -64,10 +64,8 @@ public class AuthController : ControllerBase
               return false;
           }
 
-          // Calculate the SHA1 hash of the provided password
           var hashedPassword = PasswordUtils.EncryptPassword(password);
 
-          // Compare the hashed password with the one stored in the database
           return user.Password == hashedPassword;
       }
   }

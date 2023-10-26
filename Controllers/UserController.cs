@@ -136,12 +136,62 @@ namespace symphony2.Controllers
                 return NotFound();
             }
 
-            // Set the DeletedAt timestamp to the current time
+            _context.UserCourse.RemoveRange(user.UserCourses);
             user.DeletedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
             return Ok("Delete success!");
+        }
+
+        [HttpPost("CreateUserCourse")]
+        [Authorize]
+        public async Task<IActionResult> CreateUserCourse(UserCourseCreateModel model)
+        {
+            try
+            {
+                var user = await _context.User.FirstOrDefaultAsync(u => u.Id == model.UserId);
+                var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == model.CourseId);
+
+                if (user == null || course == null)
+                {
+                    return NotFound("User or course not found.");
+                }
+
+                var userCourse = new UserCourse
+                {
+                    UserId = model.UserId,
+                    CourseId = model.CourseId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                _context.UserCourse.Add(userCourse);
+                await _context.SaveChangesAsync();
+
+                return Ok("Add Course successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("An error occurred while adding course: " + ex.Message);
+            }
+        }
+
+        // DELETE: api/User/DeleteUserCourse/{id}
+        [HttpDelete("DeleteUserCourse/{userId}/{courseId}")]
+        public async Task<IActionResult> DeleteUserCourse(int userId, int courseId)
+        {
+            var userCourse = await _context.UserCourse.FindAsync(userId, courseId);
+
+            if (userCourse == null)
+            {
+                return NotFound();
+            }
+
+            _context.UserCourse.Remove(userCourse);
+            await _context.SaveChangesAsync();
+
+            return Ok("Remove course deleted successfully.");
         }
 
         private bool UserExists(int id)

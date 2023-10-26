@@ -38,12 +38,14 @@ public partial class SymphonyContext : DbContext
         modelBuilder.Entity<UserCourse>()
             .HasOne(uc => uc.User)
             .WithMany(u => u.UserCourses)
-            .HasForeignKey(uc => uc.UserId);
+            .HasForeignKey(uc => uc.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<UserCourse>()
             .HasOne(uc => uc.Course)
             .WithMany(c => c.UserCourses)
-            .HasForeignKey(uc => uc.CourseId);
+            .HasForeignKey(uc => uc.CourseId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         OnModelCreatingPartial(modelBuilder);
     }

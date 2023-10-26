@@ -14,7 +14,11 @@ public partial class User
     public string? Email { get; set; }
 
     [Required(ErrorMessage = "Password is required")]
-    [StringLength(150, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 2 characters")]
+    [StringLength(
+        150,
+        MinimumLength = 8,
+        ErrorMessage = "Password must be between 8 and 2 characters"
+    )]
     public string? Password { get; set; }
 
     public string? FirstName { get; set; }
@@ -32,4 +36,9 @@ public partial class User
     public DateTime? DeletedAt { get; set; }
 
     public virtual ICollection<UserCourse> UserCourses { get; set; }
+
+    public User()
+    {
+        UserCourses = new List<UserCourse>();
+    }
 }

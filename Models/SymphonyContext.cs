@@ -10,7 +10,6 @@ public partial class SymphonyContext : DbContext
     {
     }
 
-
     public SymphonyContext(DbContextOptions<SymphonyContext> options)
         : base(options)
     {

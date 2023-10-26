@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using System.Text;
 using symphony2.Models;
-using symphony2.Seeders;
+using symphony2.Database.Seeders;
 using symphony2.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using symphony2.Utils;
 
-namespace symphony2.Seeders;
+namespace symphony2.Database.Seeders;
 
 public class CourseSeeder
 {

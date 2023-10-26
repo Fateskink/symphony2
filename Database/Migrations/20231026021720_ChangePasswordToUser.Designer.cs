@@ -8,7 +8,7 @@ using symphony2.Models;
 
 #nullable disable
 
-namespace symphony2.Migrations
+namespace symphony2.Database.Migrations
 {
     [DbContext(typeof(SymphonyContext))]
     [Migration("20231026021720_ChangePasswordToUser")]

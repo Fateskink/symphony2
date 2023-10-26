@@ -4,7 +4,7 @@ using Pomelo.EntityFrameworkCore.MySql.Metadata;
 
 #nullable disable
 
-namespace symphony2.Migrations
+namespace symphony2.Database.Migrations
 {
     public partial class CreateCourseTable : Migration
     {

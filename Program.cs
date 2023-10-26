@@ -60,6 +60,7 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
 
         UserSeeder.Seed(context);
+        CourseSeeder.Seed(context);
     }
     catch (Exception ex)
     {

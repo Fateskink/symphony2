@@ -55,6 +55,7 @@ namespace symphony2.Controllers
 
         // POST: api/course
         [HttpPost("course")]
+        [Authorize]
         public ActionResult<string> CreateBuilder([FromBody] Course course)
         {
             if (!ModelState.IsValid)

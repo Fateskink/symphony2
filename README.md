@@ -17,3 +17,14 @@ or
 ```
 dotnet watch run
 ```
+
+#### Generate new migration
+for the first time
+```
+chmod 755 ./Commands/migration.sh
+```
+
+then run
+```
+./migration.sh MigrationName
+

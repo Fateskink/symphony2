@@ -8,7 +8,6 @@ public class UserSeeder
 {
     public static void Seed(SymphonyContext context)
     {
-      try {
         if (!context.User.Any())
         {
             for (int i = 1; i <= 10; i++)
@@ -25,16 +24,7 @@ public class UserSeeder
                 context.User.Add(user);
             }
             context.SaveChanges();
-            Console.WriteLine("Seeder: Users added successfully");
-
-        } else {
-          Console.WriteLine("Seeder: Users already exist in the database");
-
         }
-
-      } catch (Exception ex) {
-        Console.WriteLine("Seeder Error: " + ex.Message);
-      }
     }
 
     private static string GenerateRandomName()

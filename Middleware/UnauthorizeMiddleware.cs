@@ -15,14 +15,21 @@ public class UnauthorizedMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (!context.User.Identity.IsAuthenticated)
+        if (
+            context.User != null
+            && context.User.Identity != null
+            && context.User.Identity.IsAuthenticated
+        )
+        {
+            await _next(context);
+        }
+        else
         {
             context.Response.StatusCode = 401;
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync("Unauthorized: You must be logged in to access this resource.");
-            return;
+            await context.Response.WriteAsync(
+                "Unauthorized: You must be logged in to access this resource."
+            );
         }
-
-        await _next(context);
     }
 }

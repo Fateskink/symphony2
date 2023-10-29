@@ -1,7 +1,4 @@
 using symphony2.Models;
-using System;
-using System.Linq;
-using symphony2.Utils;
 
 namespace symphony2.Database.Seeders;
 

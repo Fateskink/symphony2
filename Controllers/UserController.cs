@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using symphony2.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -70,13 +66,18 @@ namespace symphony2.Controllers
             }
 
             // Encrypt the password using SHA1
-            user.Password = PasswordUtils.EncryptPassword(user.Password);
+            if (user.Password != null)
+            {
+                user.Password = PasswordUtils.EncryptPassword(user.Password);
+            }
+            else
+            {
+                return BadRequest("Password cannot be null.");
+            }
 
-            // Set CreatedAt and UpdatedAt timestamps to the current time
             user.CreatedAt = DateTime.Now;
             user.UpdatedAt = DateTime.Now;
 
-            // Add the user to the database
             _context.User.Add(user);
             _context.SaveChanges();
 

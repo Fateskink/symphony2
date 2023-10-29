@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using symphony2.Database.Seeders;
+using symphony2.Models.Configs;
 
 namespace symphony2.Models;
 
@@ -32,20 +31,7 @@ public partial class SymphonyContext : DbContext
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
 
-        modelBuilder.Entity<UserCourse>()
-            .HasKey(uc => new { uc.UserId, uc.CourseId });
-
-        modelBuilder.Entity<UserCourse>()
-            .HasOne(uc => uc.User)
-            .WithMany(u => u.UserCourses)
-            .HasForeignKey(uc => uc.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<UserCourse>()
-            .HasOne(uc => uc.Course)
-            .WithMany(c => c.UserCourses)
-            .HasForeignKey(uc => uc.CourseId)
-            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.ApplyConfiguration(new UserCourseConfiguration());
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace symphony2.Models;
 
-public partial class Course
+public partial class Course : BaseModel
 {
-    [Key]
-    public int Id { get; set; }
-
     [Required(ErrorMessage = "Course Name is required")]
     [StringLength(
         150,
@@ -31,10 +26,6 @@ public partial class Course
         ErrorMessage = "Description must be between 3 and 1000 characters"
     )]
     public string? Description { get; set; }
-
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime UpdatedAt { get; set; }
 
     public DateTime? DeletedAt { get; set; }
 

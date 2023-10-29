@@ -21,7 +21,7 @@ dotnet watch run
 #### Generate new migration
 for the first time
 ```
-chmod 755 ./Commands/migration.sh
+chmod 755 ./migration.sh
 ```
 
 then run
